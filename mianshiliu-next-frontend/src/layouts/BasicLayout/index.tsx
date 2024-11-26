@@ -19,38 +19,7 @@ import "./index.css";
 import { userLogoutUsingPost } from "@/api/userController";
 import { setLoginUser } from "@/stores/loginUser";
 import { DEFAULT_USER } from "@/constans/user";
-
-/**
- * 搜索条
- * @constructor
- */
-const SearchInput = () => {
-  return (
-    <div
-      key="SearchOutlined"
-      aria-hidden
-      style={{
-        display: "flex",
-        alignItems: "center",
-        marginInlineEnd: 24,
-      }}
-      onMouseDown={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-    >
-      <Input
-        style={{
-          borderRadius: 4,
-          marginInlineEnd: 12,
-        }}
-        prefix={<SearchOutlined />}
-        placeholder="搜索题目"
-        variant="borderless"
-      />
-    </div>
-  );
-};
+import SearchInput from "@/layouts/BasicLayout/compoents/SearchInput";
 
 interface Props {
   children: React.ReactNode;
@@ -111,27 +80,26 @@ export default function BasicLayout({ children }: Props) {
           title: loginUser.userName || "鱼皮牛",
           render: (props, dom) => {
             return loginUser.id ? (
-                <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: "logout",
-                          icon: <LogoutOutlined />,
-                          label: "退出登录",
-                        },
-                      ],
-                      onClick: async (event: { key: React.Key }) => {
-                        const { key } = event;
-                        // 退出登录
-                        if (key === "logout") {
-                          userLogout();
-                        }
-                      },
-                    }}
-                >
-                  {dom}
-                </Dropdown>
-
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "logout",
+                      icon: <LogoutOutlined />,
+                      label: "退出登录",
+                    },
+                  ],
+                  onClick: async (event: { key: React.Key }) => {
+                    const { key } = event;
+                    // 退出登录
+                    if (key === "logout") {
+                      userLogout();
+                    }
+                  },
+                }}
+              >
+                {dom}
+              </Dropdown>
             ) : (
               <div onClick={() => router.push("/user/login")}>{dom}</div>
             );

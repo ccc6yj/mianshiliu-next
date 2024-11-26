@@ -64,12 +64,15 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankVO_ = {
+    records: never[];
     code?: number;
     data?: PageQuestionBankVO_;
     message?: string;
   };
 
   type BaseResponsePageQuestionVO_ = {
+    records: never[];
+    total(total: any): unknown;
     code?: number;
     data?: PageQuestionVO_;
     message?: string;
