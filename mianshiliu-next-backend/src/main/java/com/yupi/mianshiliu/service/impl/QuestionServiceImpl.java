@@ -263,6 +263,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                         .collect(Collectors.toSet());
                 queryWrapper.in("id", questionIdSet);
 
+            }else {
+                // 题库为空，则返回空列表
+                return new Page<>(current, size, 0);
             }
         }
         // 查询数据库
