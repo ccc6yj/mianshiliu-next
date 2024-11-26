@@ -7,6 +7,7 @@ import {ActionType, ProColumns, ProTable} from "@ant-design/pro-components";
 import Link from "next/link";
 import TagList from "@/components/TagList";
 import {TablePaginationConfig} from "antd";
+import {listQuestionVoByPageUsingPost} from "@/api/questionController";
 
 interface Props {
   //默认值用于展示服务端数据
@@ -21,11 +22,11 @@ interface Props {
  * @constructor
  */
 export default function QuestionTable(props: Props) {
-  const { defaultQuestionList, defaultTotal, defaultSearchParams = {} } = props;
   const actionRef = useRef<ActionType>();
+  const { defaultQuestionList, defaultTotal, defaultSearchParams = {} } = props;
   //题目列表
   const [questionList, setQuestionList] = useState<API.QuestionVO[]>(
-    defaultQuestionList ?? [],
+    defaultQuestionList || [],
   );
   //题目总数
   const [total, setTotal] = useState<number>(defaultTotal || 0);
@@ -63,12 +64,13 @@ export default function QuestionTable(props: Props) {
         search={{
           labelWidth: "auto",
         }}
-        data={defaultQuestionList}
+        dataSource={questionList}
         pagination={
           {
             pageSize: 12,
             showTotal: (total) => `总共 ${total} 条`,
             showSizeChanger: false,
+            total,
           } as TablePaginationConfig
         }
         //@ts-ignore

@@ -61,14 +61,14 @@ export default function BasicLayout({ children }: Props) {
       }}
     >
       <ProLayout
-        title="面试鸭刷题平台"
+        title="面试牛刷题平台"
         layout="top"
         logo={
           <Image
             src="/assets/logo.png"
             height={32}
             width={32}
-            alt="面试鸭刷题网站 - 程序员鱼皮"
+            alt="面试牛刷题网站 - 程序员鱼皮"
           />
         }
         location={{
@@ -77,7 +77,7 @@ export default function BasicLayout({ children }: Props) {
         avatarProps={{
           src: loginUser.userAvatar || "/assets/logo.png",
           size: "small",
-          title: loginUser.userName || "鱼皮牛",
+          title: loginUser.userName || "刘某",
           render: (props, dom) => {
             return loginUser.id ? (
               <Dropdown
