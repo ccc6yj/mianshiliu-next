@@ -21,6 +21,7 @@ export default async function QuestionsPage({ searchParams }) {
       sortField: "createTime",
       sortOrder: "descend",
     });
+    // @ts-ignore
     questionList = questionRes.data.records ?? [];
     // @ts-ignore
     total = questionRes.data.total ?? 0;

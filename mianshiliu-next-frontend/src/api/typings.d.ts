@@ -36,16 +36,12 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestion_ = {
-    total(total: any): number | undefined;
-    records: never[];
     code?: number;
     data?: PageQuestion_;
     message?: string;
   };
 
   type BaseResponsePageQuestionBank_ = {
-    total(total: any): number | undefined;
-    records: never[];
     code?: number;
     data?: PageQuestionBank_;
     message?: string;
@@ -64,23 +60,18 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankVO_ = {
-    records: never[];
     code?: number;
     data?: PageQuestionBankVO_;
     message?: string;
   };
 
   type BaseResponsePageQuestionVO_ = {
-    records: never[];
-    total(total: any): unknown;
     code?: number;
     data?: PageQuestionVO_;
     message?: string;
   };
 
   type BaseResponsePageUser_ = {
-    records: never[];
-    total(total: any): number | undefined;
     code?: number;
     data?: PageUser_;
     message?: string;
@@ -535,7 +526,7 @@ declare namespace API {
     description?: string;
     id?: number;
     picture?: string;
-    questionPage?: PageQuestion_;
+    questionPage?: PageQuestionVO_;
     title?: string;
     updateTime?: string;
     user?: UserVO;
@@ -592,7 +583,6 @@ declare namespace API {
 
   type User = {
     createTime?: string;
-    editTime?: string;
     id?: number;
     isDelete?: number;
     mpOpenId?: string;
