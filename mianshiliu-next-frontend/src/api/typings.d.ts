@@ -36,6 +36,8 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestion_ = {
+    total(total: any): number | undefined;
+    records: any[];
     code?: number;
     data?: PageQuestion_;
     message?: string;
@@ -48,6 +50,7 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankQuestion_ = {
+    records: any;
     code?: number;
     data?: PageQuestionBankQuestion_;
     message?: string;
@@ -60,6 +63,7 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankVO_ = {
+    records: any;
     code?: number;
     data?: PageQuestionBankVO_;
     message?: string;
@@ -67,7 +71,7 @@ declare namespace API {
 
   type BaseResponsePageQuestionVO_ = {
     total(total: any): unknown;
-    records: never[];
+    records: any;
     code?: number;
     data?: PageQuestionVO_;
     message?: string;

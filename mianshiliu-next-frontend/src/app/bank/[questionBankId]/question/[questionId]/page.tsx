@@ -43,19 +43,20 @@ export default async function BankQuestionPage({ params }) {
     question = res.data;
   } catch (e) {
     // @ts-ignore
-    console.error("获取题库详情失败，" + e.message);
+    console.error("获取题目详情失败，" + e.message);
   }
 
   if (!question) {
     return <div>获取题目详情失败，请刷新重试</div>;
   }
-// 题目菜单列表
+  // 题目菜单列表
   const questionMenuItemList = (bank.questionPage?.records || []).map(
     (question) => {
       return {
         label: (
           <Link
             href={`/bank/${questionBankId}/question/${question.id}`}
+            prefetch={false}
           >
             {question.title}
           </Link>
