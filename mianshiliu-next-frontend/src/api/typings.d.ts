@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListInt_ = {
+    code?: number;
+    data?: number[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO_ = {
     code?: number;
     data?: LoginUserVO;
@@ -36,8 +42,6 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestion_ = {
-    total(total: any): number | undefined;
-    records: any[];
     code?: number;
     data?: PageQuestion_;
     message?: string;
@@ -50,7 +54,6 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankQuestion_ = {
-    records: any;
     code?: number;
     data?: PageQuestionBankQuestion_;
     message?: string;
@@ -63,15 +66,12 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankVO_ = {
-    records: any;
     code?: number;
     data?: PageQuestionBankVO_;
     message?: string;
   };
 
   type BaseResponsePageQuestionVO_ = {
-    total(total: any): unknown;
-    records: any;
     code?: number;
     data?: PageQuestionVO_;
     message?: string;
@@ -179,6 +179,11 @@ declare namespace API {
   type getUserByIdUsingGETParams = {
     /** id */
     id?: number;
+  };
+
+  type getUserSignInRecordUsingGETParams = {
+    /** year */
+    year?: number;
   };
 
   type getUserVOByIdUsingGETParams = {
