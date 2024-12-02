@@ -1,10 +1,6 @@
 package com.yupi.mianshiliu.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yupi.mianshiliu.annotation.AuthCheck;
 import com.yupi.mianshiliu.common.BaseResponse;
@@ -19,7 +15,6 @@ import com.yupi.mianshiliu.model.dto.question.QuestionEditRequest;
 import com.yupi.mianshiliu.model.dto.question.QuestionQueryRequest;
 import com.yupi.mianshiliu.model.dto.question.QuestionUpdateRequest;
 import com.yupi.mianshiliu.model.entity.Question;
-import com.yupi.mianshiliu.model.entity.QuestionBankQuestion;
 import com.yupi.mianshiliu.model.entity.User;
 import com.yupi.mianshiliu.model.vo.QuestionVO;
 import com.yupi.mianshiliu.service.QuestionBankQuestionService;
@@ -32,8 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 题目接口
@@ -256,6 +249,17 @@ public class QuestionController {
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
+
+    @PostMapping("/search/page/vo")
+    public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+                                                                 HttpServletRequest request) {
+        long size = questionQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 200, ErrorCode.PARAMS_ERROR);
+        Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+    }
+
 
     // endregion
 }

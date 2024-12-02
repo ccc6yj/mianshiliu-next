@@ -72,6 +72,8 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionVO_ = {
+    records: any[];
+    total(total: any): unknown;
     code?: number;
     data?: PageQuestionVO_;
     message?: string;

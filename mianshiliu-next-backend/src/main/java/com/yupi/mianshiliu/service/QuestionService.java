@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yupi.mianshiliu.model.dto.question.QuestionQueryRequest;
 import com.yupi.mianshiliu.model.entity.Question;
 import com.yupi.mianshiliu.model.vo.QuestionVO;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,4 +52,13 @@ public interface QuestionService extends IService<Question> {
     Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
 
     Page<Question> listQuestionByPage( QuestionQueryRequest questionQueryRequest);
+
+    /**
+     * 从 ES 查询题目
+     *
+     * @param questionQueryRequest
+     * @return
+     */
+    Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest);
+
 }

@@ -1,6 +1,6 @@
 import Title from "antd/es/typography/Title";
 import QuestionTable from "@/components/QuestionTable";
-import { listQuestionVoByPageUsingPost } from "@/api/questionController";
+import {listQuestionVoByPageUsingPost, searchQuestionVoByPageUsingPost} from "@/api/questionController";
 import "./index.css";
 import React from "react";
 
@@ -15,10 +15,10 @@ export default async function QuestionsPage({ searchParams }) {
   const { q: searchText } = searchParams;
 
   try {
-    const questionRes = await listQuestionVoByPageUsingPost({
-      title: searchText,
+    const questionRes = await searchQuestionVoByPageUsingPost({
+      searchText,
       pageSize: 12,
-      sortField: "createTime",
+      sortField: "_score",
       sortOrder: "descend",
     });
     // @ts-ignore

@@ -7,7 +7,7 @@ import {ActionType, ProColumns, ProTable} from "@ant-design/pro-components";
 import Link from "next/link";
 import TagList from "@/components/TagList";
 import {TablePaginationConfig} from "antd";
-import {listQuestionVoByPageUsingPost} from "@/api/questionController";
+import {listQuestionVoByPageUsingPost, searchQuestionVoByPageUsingPost} from "@/api/questionController";
 
 interface Props {
   //默认值用于展示服务端数据
@@ -37,12 +37,21 @@ export default function QuestionTable(props: Props) {
    */
   const columns: ProColumns<API.QuestionVO>[] = [
     {
-      title: "题目",
+      title: "搜索",
+      dataIndex: "searchText",
+      valueType: "text",
+      hideInTable: true,
+    },
+    {
+      title: "标题",
       dataIndex: "title",
-      render(_, record) {
+      valueType: "text",
+      hideInSearch: true,
+      render: (_, record) => {
         return <Link href={`/question/${record.id}`}>{record.title}</Link>;
       },
     },
+
     {
       title: "标签",
       dataIndex: "tagList",
@@ -88,9 +97,9 @@ export default function QuestionTable(props: Props) {
           const sortOrder = sort?.[sortField] || "descend";
           // 请求
           // @ts-ignore
-          const { data, code } = await listQuestionVoByPageUsingPost({
+          const { data, code } = await searchQuestionVoByPageUsingPost({
             ...params,
-            sortField,
+            sortField:'_score',
             sortOrder,
             ...filter,
           } as API.UserQueryRequest);

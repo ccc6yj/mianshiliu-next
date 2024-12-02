@@ -16,6 +16,7 @@
     "@bytemd/plugin-gfm": "^1.21.0",
     "@bytemd/plugin-highlight": "^1.21.0",
     "@bytemd/react": "^1.21.0",
+    "@formatjs/intl-unified-numberformat": "^3.3.7",
     "@reduxjs/toolkit": "^2.3.0",
     "antd": "^5.22.1",
     "axios": "^1.7.7",
