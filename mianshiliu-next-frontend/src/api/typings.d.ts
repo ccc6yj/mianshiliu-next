@@ -42,6 +42,8 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestion_ = {
+    total(total: any): number;
+    records: any[];
     code?: number;
     data?: PageQuestion_;
     message?: string;
@@ -66,14 +68,13 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBankVO_ = {
+    records: any[];
     code?: number;
     data?: PageQuestionBankVO_;
     message?: string;
   };
 
   type BaseResponsePageQuestionVO_ = {
-    records: any[];
-    total(total: any): unknown;
     code?: number;
     data?: PageQuestionVO_;
     message?: string;
@@ -493,6 +494,16 @@ declare namespace API {
     questionId?: number;
   };
 
+  type QuestionBankQuestionBatchAddRequest = {
+    questionBankId?: number;
+    questionIdList?: number[];
+  };
+
+  type QuestionBankQuestionBatchRemoveRequest = {
+    questionBankId?: number;
+    questionIdList?: number[];
+  };
+
   type QuestionBankQuestionQueryRequest = {
     current?: number;
     id?: number;
@@ -544,6 +555,10 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+  };
+
+  type QuestionBatchDeleteRequest = {
+    questionIdList?: number[];
   };
 
   type QuestionEditRequest = {

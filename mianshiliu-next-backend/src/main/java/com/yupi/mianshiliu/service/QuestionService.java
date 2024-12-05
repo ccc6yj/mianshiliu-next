@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yupi.mianshiliu.model.dto.question.QuestionQueryRequest;
 import com.yupi.mianshiliu.model.entity.Question;
 import com.yupi.mianshiliu.model.vo.QuestionVO;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 题目服务
@@ -61,4 +63,6 @@ public interface QuestionService extends IService<Question> {
      */
     Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest);
 
+    @Transactional(rollbackFor = Exception.class)
+    void batchDeleteQuestions(List<Long> questionIdList);
 }
