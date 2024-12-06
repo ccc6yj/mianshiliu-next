@@ -26,6 +26,8 @@ import com.yupi.mianshiliu.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -194,16 +196,49 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
                 .collect(Collectors.toList());
         ThrowUtils.throwIf(CollUtil.isEmpty(validQuestionIdList), ErrorCode.PARAMS_ERROR, "合法的题目列表为空");
         // 检查题库 id 是否存在
+        // 检查哪些题目还不存在于题库中，避免重复插入
+        LambdaQueryWrapper<QuestionBankQuestion> lambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class)
+                .eq(QuestionBankQuestion::getQuestionBankId, questionBankId)
+                .in(QuestionBankQuestion::getQuestionId, validQuestionIdList);
+        List<QuestionBankQuestion> existQuestionList = this.list(lambdaQueryWrapper);
+        // 已存在于题库中的题目 id
+        Set<Long> existQuestionIdSet = existQuestionList.stream()
+                .map(QuestionBankQuestion::getId)
+                .collect(Collectors.toSet());
+        // 已存在于题库中的题目 id，不需要再次添加
+        validQuestionIdList = validQuestionIdList.stream().filter(questionId -> {
+            return !existQuestionIdSet.contains(questionId);
+        }).collect(Collectors.toList());
+        ThrowUtils.throwIf(CollUtil.isEmpty(validQuestionIdList), ErrorCode.PARAMS_ERROR, "所有题目都已存在于题库中");
+
+
+        // 检查题库 id 是否存在
         QuestionBank questionBank = questionBankService.getById(questionBankId);
         ThrowUtils.throwIf(questionBank == null, ErrorCode.NOT_FOUND_ERROR, "题库不存在");
+
         // 执行插入
         for (Long questionId : validQuestionIdList) {
             QuestionBankQuestion questionBankQuestion = new QuestionBankQuestion();
             questionBankQuestion.setQuestionBankId(questionBankId);
             questionBankQuestion.setQuestionId(questionId);
             questionBankQuestion.setUserId(loginUser.getId());
-            boolean result = this.save(questionBankQuestion);
-            if (!result) {
+            try {
+                boolean result = this.save(questionBankQuestion);
+                if (!result) {
+                    throw new BusinessException(ErrorCode.OPERATION_ERROR, "向题库添加题目失败");
+                }
+            } catch (DataIntegrityViolationException e) {
+                log.error("数据库唯一键冲突或违反其他完整性约束，题目 id: {}, 题库 id: {}, 错误信息: {}",
+                        questionId, questionBankId, e.getMessage());
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "题目已存在于该题库，无法重复添加");
+            } catch (DataAccessException e) {
+                log.error("数据库连接问题、事务问题等导致操作失败，题目 id: {}, 题库 id: {}, 错误信息: {}",
+                        questionId, questionBankId, e.getMessage());
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "数据库操作失败");
+            } catch (Exception e) {
+                // 捕获其他异常，做通用处理
+                log.error("添加题目到题库时发生未知错误，题目 id: {}, 题库 id: {}, 错误信息: {}",
+                        questionId, questionBankId, e.getMessage());
                 throw new BusinessException(ErrorCode.OPERATION_ERROR, "向题库添加题目失败");
             }
         }
