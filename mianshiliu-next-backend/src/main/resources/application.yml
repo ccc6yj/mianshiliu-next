@@ -23,7 +23,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mianshiliu
     username: root
-    password: 123456
+    password: 2013..lyj
     # 指定数据源类型
     type: com.alibaba.druid.pool.DruidDataSource
     # Druid 配置
