@@ -50,6 +50,8 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionBank_ = {
+    total(total: any): number;
+    records: any[];
     code?: number;
     data?: PageQuestionBank_;
     message?: string;
@@ -75,6 +77,8 @@ declare namespace API {
   };
 
   type BaseResponsePageQuestionVO_ = {
+    total(total: any): unknown;
+    records: any[];
     code?: number;
     data?: PageQuestionVO_;
     message?: string;

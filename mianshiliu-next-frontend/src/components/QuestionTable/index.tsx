@@ -99,7 +99,8 @@ export default function QuestionTable(props: Props) {
           // @ts-ignore
           const { data, code } = await searchQuestionVoByPageUsingPost({
             ...params,
-            sortField:'_score',
+            //es 查询条件
+            // sortField:'_score',
             sortOrder,
             ...filter,
           } as API.UserQueryRequest);

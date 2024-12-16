@@ -1,10 +1,13 @@
 import axios from "axios";
 
-// 创建 Axios 示例
+// 创建 Axios 实例
+// 区分开发和生产环境
+const DEV_BASE_URL = "http://localhost:8101";
+const PROD_BASE_URL = "http://124.222.69.108/";
 const myAxios = axios.create({
-  baseURL: "http://localhost:8101",
-  timeout: 10000,
-  withCredentials: true,
+    baseURL: PROD_BASE_URL,
+    timeout: 10000,
+    withCredentials: true,
 });
 
 // 创建请求拦截器

@@ -18,7 +18,8 @@ export default async function QuestionsPage({ searchParams }) {
     const questionRes = await searchQuestionVoByPageUsingPost({
       searchText,
       pageSize: 12,
-      sortField: "_score",
+      //es查询条件
+      // sortField: "_score",
       sortOrder: "descend",
     });
     // @ts-ignore

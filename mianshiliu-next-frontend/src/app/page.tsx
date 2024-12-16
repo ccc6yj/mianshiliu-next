@@ -1,4 +1,4 @@
-"use server";
+
 import Title from "antd/es/typography/Title";
 import { Divider, Flex } from "antd";
 import "./index.css";
@@ -8,6 +8,10 @@ import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController"
 import { listQuestionVoByPageUsingPost } from "@/api/questionController";
 import QuestionBankList from "@/components/QuestionBankList";
 import QuestionList from "@/components/QuestionList";
+
+//不需要缓存的页面开头添加下列代码，就能强制要求每次请求时都从后端重新获取数据
+//注意，加上这行代码后，页面开头就不能再写 use server
+export const dynamic = 'force-dynamic';
 
 /**
  * 主页

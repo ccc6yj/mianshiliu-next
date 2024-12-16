@@ -16,11 +16,11 @@ export const menus = [
     path: "/questions",
     name: "题目",
   },
-  {
-    name: "面试牛",
-    path: "https://mianshiya.com",
-    target: "_blank",
-  },
+  // {
+  //   name: "面试牛",
+  //   path: "https://mianshiya.com",
+  //   target: "_blank",
+  // },
   {
     path: "/admin",
     name: "管理",
