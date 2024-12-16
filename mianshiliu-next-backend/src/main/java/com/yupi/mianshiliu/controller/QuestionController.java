@@ -355,7 +355,11 @@ public class QuestionController {
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
         ThrowUtils.throwIf(size > 200, ErrorCode.PARAMS_ERROR);
-        Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        //查询es
+//        Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        //查询数据库
+        Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
+
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
     }
 

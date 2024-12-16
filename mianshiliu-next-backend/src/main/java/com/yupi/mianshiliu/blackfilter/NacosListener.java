@@ -8,7 +8,6 @@ import com.sun.istack.internal.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +16,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
-@Component
+//todo 取消注释开启 nacos(须先配置nacos)
+//@Component
 public class NacosListener implements InitializingBean {
 
     @NacosInjected
