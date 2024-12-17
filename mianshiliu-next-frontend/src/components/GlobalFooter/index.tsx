@@ -12,9 +12,7 @@ export default function GlobalFooter() {
     <div className="global-footer">
       <div>© {currentYear} 面试刷题平台</div>
       <div>
-        <a href="https://www.code-nav.cn" target="_blank">
           作者：liumou
-        </a>
       </div>
     </div>
   );

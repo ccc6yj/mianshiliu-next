@@ -117,7 +117,7 @@ export default function BasicLayout({ children }: Props) {
             <SearchInput key="search" />,
             <a
               key="github"
-              href="https://github.com/liyupi/mianshiya-next"
+              href="https://github.com/ccc6yj/mianshiliu-next"
               target="_blank"
             >
               <GithubFilled key="GithubFilled" />
