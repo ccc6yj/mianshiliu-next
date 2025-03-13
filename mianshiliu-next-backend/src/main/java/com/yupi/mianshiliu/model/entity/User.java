@@ -1,5 +1,6 @@
 package com.yupi.mianshiliu.model.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
@@ -22,11 +23,13 @@ public class User implements Serializable {
     /**
      * 账号
      */
+    @ExcelProperty("账户")
     private String userAccount;
 
     /**
      * 密码
      */
+    @ExcelProperty("密码")
     private String userPassword;
 
     /**
@@ -42,6 +45,7 @@ public class User implements Serializable {
     /**
      * 用户昵称
      */
+    @ExcelProperty("用户名")
     private String userName;
 
     /**
