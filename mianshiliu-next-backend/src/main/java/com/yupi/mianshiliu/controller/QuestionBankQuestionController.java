@@ -33,7 +33,6 @@ import java.util.List;
 /**
  * 题库题目关联接口
  *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈
  */
 @RestController
 @RequestMapping("/questionBankQuestion")

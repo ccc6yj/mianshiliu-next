@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
  * 题库接口
  *
  *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈
  */
 @RestController
 @RequestMapping("/questionBank")

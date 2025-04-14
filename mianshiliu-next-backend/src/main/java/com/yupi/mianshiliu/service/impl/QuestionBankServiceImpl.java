@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
  * 题库服务实现
  *
  *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈
  */
 @Service
 @Slf4j

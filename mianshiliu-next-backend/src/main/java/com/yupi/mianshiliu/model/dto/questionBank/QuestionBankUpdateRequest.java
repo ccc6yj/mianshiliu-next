@@ -9,7 +9,6 @@ import java.util.List;
  * 更新题库请求
  *
  *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈
  */
 @Data
 public class QuestionBankUpdateRequest implements Serializable {

@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
  * 题目接口
  *
  *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈
  */
 @RestController
 @RequestMapping("/question")

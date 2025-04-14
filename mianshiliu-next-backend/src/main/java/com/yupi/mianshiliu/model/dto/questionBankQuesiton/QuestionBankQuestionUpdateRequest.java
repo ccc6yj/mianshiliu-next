@@ -8,7 +8,6 @@ import java.io.Serializable;
  * 更新题库题目关联请求
  *
  *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈
  */
 @Data
 public class QuestionBankQuestionUpdateRequest implements Serializable {
