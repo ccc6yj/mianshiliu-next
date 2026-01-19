@@ -102,11 +102,24 @@ jobs:
       - name: Create standalone package
         run: |
           cd mianshiliu-next-frontend
-          mkdir -p standalone
-          cp -r .next/standalone/* standalone/ 2>/dev/null || true
-          cp -r .next/static standalone/.next/static 2>/dev/null || true
-          cp -r public standalone/public 2>/dev/null || true
+          echo "检查 .next/standalone 目录..."
+          ls -la .next/
+          ls -la .next/standalone/ || echo "standalone 目录不存在!"
+
+          # 复制 standalone 文件
+          cp -r .next/standalone ./standalone
+
+          # 复制静态文件
+          mkdir -p standalone/.next
+          cp -r .next/static standalone/.next/static
+
+          # 复制 public 文件夹
+          [ -d public ] && cp -r public standalone/public
+
+          # 打包
           zip -r standalone.zip standalone
+          echo "打包完成，文件大小:"
+          ls -lh standalone.zip
 
       - name: Upload to server
         uses: appleboy/scp-action@v0.1.7
