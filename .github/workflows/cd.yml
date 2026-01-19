@@ -29,13 +29,18 @@ jobs:
       - name: Build JAR
         run: mvn clean package -DskipTests -f mianshiliu-next-backend/pom.xml
 
+      - name: Compress JAR
+        run: |
+          cd mianshiliu-next-backend/target
+          gzip -9 -k mianshiliu-next-backend-0.0.1-SNAPSHOT.jar
+
       - name: Upload JAR to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          source: "mianshiliu-next-backend/target/mianshiliu-next-backend-0.0.1-SNAPSHOT.jar"
+          source: "mianshiliu-next-backend/target/mianshiliu-next-backend-0.0.1-SNAPSHOT.jar.gz"
           target: "/www/wwwroot"
           strip_components: 2
 
@@ -45,8 +50,11 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
+          envs: DB_USERNAME,DB_PASSWORD,REDIS_PASSWORD
           script: |
             cd /www/wwwroot
+            # 解压新 JAR
+            gunzip -f mianshiliu-next-backend-0.0.1-SNAPSHOT.jar.gz
             # 停止旧进程
             pid=$(ps -ef | grep 'mianshiliu-next-backend' | grep -v grep | awk '{print $2}')
             if [ -n "$pid" ]; then
@@ -54,7 +62,10 @@ jobs:
               echo "已停止旧进程: $pid"
               sleep 2
             fi
-            # 启动新进程
+            # 启动新进程（带环境变量）
+            export DB_USERNAME="${{ secrets.DB_USERNAME }}"
+            export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
             nohup java -jar -Xms256m -Xmx512m mianshiliu-next-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > backend.log 2>&1 &
             sleep 3
             # 检查是否启动成功

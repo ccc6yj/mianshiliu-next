@@ -1,26 +1,22 @@
 # 线上配置文件
-# 
-# 
+# 敏感信息从环境变量读取
 server:
   port: 8101
 spring:
   # 数据库配置
-  # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/mianshiliu
-    username: mianshiliu_user
-    password: 123456
+    username: ${DB_USERNAME:mianshiliu_user}
+    password: ${DB_PASSWORD:123456}
   # Redis 配置
-  # todo 需替换配置
   redis:
     database: 0
     host: 127.0.0.1
     port: 6379
     timeout: 5000
-    password: 123456
+    password: ${REDIS_PASSWORD:123456}
   # Elasticsearch 配置
-  # todo 需替换配置
 #  elasticsearch:
 #    uris: http://localhost:9200
 #    username: root
@@ -34,4 +30,4 @@ knife4j:
   basic:
     enable: true
     username: root
-    password: 123456
+    password: ${KNIFE4J_PASSWORD:123456}
