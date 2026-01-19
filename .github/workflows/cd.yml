@@ -116,10 +116,21 @@ jobs:
           # 复制 public 文件夹
           [ -d public ] && cp -r public standalone/public
 
-          # 打包
-          zip -r standalone.zip standalone
+          # 验证 .next 目录已复制
+          echo "验证 standalone/.next 目录..."
+          ls -la standalone/.next/ || echo ".next 目录复制失败!"
+          ls -la standalone/.next/static/ || echo "static 目录不存在!"
+
+          # 打包（确保包含隐藏文件夹）
+          cd standalone
+          zip -r ../standalone.zip .
+          cd ..
           echo "打包完成，文件大小:"
           ls -lh standalone.zip
+
+          # 验证 zip 内容
+          echo "验证 zip 包含 .next 目录..."
+          unzip -l standalone.zip | grep ".next" | head -5
 
       - name: Upload to server
         uses: appleboy/scp-action@v0.1.7
@@ -141,10 +152,14 @@ jobs:
             cd /www/wwwroot
             # 备份旧版本
             [ -d mianshiliu-frontend ] && mv mianshiliu-frontend mianshiliu-frontend.bak.$(date +%Y%m%d%H%M%S)
-            # 解压新版本
-            unzip -o standalone.zip
-            mv standalone mianshiliu-frontend
+            # 创建新目录并解压
+            mkdir -p mianshiliu-frontend
+            unzip -o standalone.zip -d mianshiliu-frontend
             rm -f standalone.zip
+            # 验证 .next 目录存在
+            echo "验证目录结构..."
+            ls -la mianshiliu-frontend/
+            ls -la mianshiliu-frontend/.next/ || echo ".next 目录不存在!"
             cd mianshiliu-frontend
             # 使用 pm2 重启
             pm2 delete mianshiliu-frontend 2>/dev/null || true
