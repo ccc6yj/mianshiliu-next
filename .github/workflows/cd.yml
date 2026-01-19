@@ -34,8 +34,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          # password: ${{ secrets.SERVER_PASSWORD }}  # 如果用密码登录，取消此行注释
+          password: ${{ secrets.SERVER_PASSWORD }}
           source: "mianshiliu-next-backend/target/mianshiliu-next-backend-0.0.1-SNAPSHOT.jar"
           target: "/www/wwwroot"
           strip_components: 2
@@ -45,7 +44,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd /www/wwwroot
             # 停止旧进程
@@ -103,7 +102,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           source: "mianshiliu-next-frontend/standalone.zip"
           target: "/www/wwwroot"
           strip_components: 1
@@ -113,7 +112,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd /www/wwwroot
             # 备份旧版本
