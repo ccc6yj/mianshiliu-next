@@ -1,0 +1,129 @@
+# 持续部署 - 构建并部署到宝塔服务器
+# 推送 tag 或手动触发时运行
+
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*'  # 推送 tag 如 v1.0.0 时触发
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  # 后端部署
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build JAR
+        run: mvn clean package -DskipTests -f mianshiliu-next-backend/pom.xml
+
+      - name: Upload JAR to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          # password: ${{ secrets.SERVER_PASSWORD }}  # 如果用密码登录，取消此行注释
+          source: "mianshiliu-next-backend/target/mianshiliu-next-backend-0.0.1-SNAPSHOT.jar"
+          target: "/www/wwwroot"
+          strip_components: 2
+
+      - name: Restart backend service
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /www/wwwroot
+            # 停止旧进程
+            pid=$(ps -ef | grep 'mianshiliu-next-backend' | grep -v grep | awk '{print $2}')
+            if [ -n "$pid" ]; then
+              kill -9 $pid
+              echo "已停止旧进程: $pid"
+              sleep 2
+            fi
+            # 启动新进程
+            nohup java -jar -Xms256m -Xmx512m mianshiliu-next-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > backend.log 2>&1 &
+            sleep 3
+            # 检查是否启动成功
+            if ps -ef | grep 'mianshiliu-next-backend' | grep -v grep > /dev/null; then
+              echo "后端服务启动成功"
+            else
+              echo "后端服务启动失败，请检查日志"
+              exit 1
+            fi
+
+  # 前端部署
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: mianshiliu-next-frontend/package-lock.json
+
+      - name: Install and build
+        run: |
+          cd mianshiliu-next-frontend
+          npm ci
+          npm run build
+
+      # 打包 standalone 输出（Next.js standalone 模式）
+      - name: Create standalone package
+        run: |
+          cd mianshiliu-next-frontend
+          mkdir -p standalone
+          cp -r .next/standalone/* standalone/ 2>/dev/null || true
+          cp -r .next/static standalone/.next/static 2>/dev/null || true
+          cp -r public standalone/public 2>/dev/null || true
+          zip -r standalone.zip standalone
+
+      - name: Upload to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "mianshiliu-next-frontend/standalone.zip"
+          target: "/www/wwwroot"
+          strip_components: 1
+
+      - name: Deploy frontend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /www/wwwroot
+            # 备份旧版本
+            [ -d mianshiliu-frontend ] && mv mianshiliu-frontend mianshiliu-frontend.bak.$(date +%Y%m%d%H%M%S)
+            # 解压新版本
+            unzip -o standalone.zip
+            mv standalone mianshiliu-frontend
+            rm -f standalone.zip
+            cd mianshiliu-frontend
+            # 使用 pm2 重启
+            pm2 delete mianshiliu-frontend 2>/dev/null || true
+            pm2 start server.js --name mianshiliu-frontend
+            echo "前端服务已部署"
