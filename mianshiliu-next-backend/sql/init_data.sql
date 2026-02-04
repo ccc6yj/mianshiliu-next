@@ -16,10 +16,8 @@ VALUES (1, 'user1', 'b0dd3697a192885d7c055db46155b26a', 'unionId1', 'mpOpenId1',
 
 -- 题库表初始数据
 INSERT INTO question_bank (title, description, picture, userId)
-VALUES ('JavaScript 基础', '包含 JavaScript 的基础知识题目',
-        'https://via.placeholder.com/200, 1),
-       ('CSS 样式', '包含 CSS 相关的样式问题',
-        'https://via.placeholder.com/200, 2),
+VALUES ('JavaScript 基础', '包含 JavaScript 的基础知识题目','https://via.placeholder.com/200', 1),
+       ('CSS 样式', '包含 CSS 相关的样式问题','https://via.placeholder.com/200', 2),
        ('HTML 基础', 'HTML 标记语言的基本知识', 'https://www.mianshiya.com/logo.png', 3),
        ('前端框架', 'React, Vue, Angular 等框架相关的题目', 'https://www.mianshiya.com/logo.png', 1),
        ('算法与数据结构', '数据结构和算法题目', 'https://www.mianshiya.com/logo.png', 2),
